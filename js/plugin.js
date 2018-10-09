@@ -71,8 +71,10 @@ form.addEventListener('submit', function (e) {
     }
 });
 
-inputText.addEventListener('change', function (e) {
-    console.log(this.value,e);
+inputText.addEventListener('keyup', function () {
+    if (inputText.value) {
+        inputText.classList.remove('is-invalid');
+    }
 });
 generateList(tasks);
 
