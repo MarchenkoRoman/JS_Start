@@ -34,3 +34,8 @@ function addList (list) {
 }
 
 generateList(tasks);
+
+let btn = document.querySelector('.clear-btn');
+
+btn.addEventListener()
+console.dir(btn);
