@@ -32,7 +32,7 @@ PaginationHelper.prototype.pageItemCount = function(pageIndex) {
 PaginationHelper.prototype.pageIndex = function(itemIndex) {
     if(itemIndex < 0 || this.elements.length === 0 || itemIndex > this.elements.length) return -1;
     if (itemIndex === 0 || itemIndex / this.elementsPerPage === 1) return 0;
-    return return Math.floor((itemIndex / this.elementsPerPage));
+    return Math.floor((itemIndex / this.elementsPerPage));
 }
 console.log(helper.pageItemCount(1));
 

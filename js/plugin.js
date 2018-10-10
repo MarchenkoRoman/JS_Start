@@ -78,6 +78,34 @@ inputText.addEventListener('keyup', function () {
 });
 generateList(tasks);
 
+let body = document.body;
+let taskWrap = document.querySelector('.tasks-wrap');
+let container = document.querySelector('.container');
+let listCard = document.querySelector('.list-card');
+let cardBody = document.querySelector('.list-card .card-body');
+let listGroup = document.querySelector('.list-group');
+
+listGroup.addEventListener('click', function (e) {
+    console.log('list-group');
+});
+
+cardBody.addEventListener('click', function (e) {
+    console.log('list-card card-body');
+});
+
+listCard.addEventListener('click', function (e) {
+    e.stopImmediatePropagation();
+    console.log('listCard');
+});
+
+container.addEventListener('click', function (e) {
+    console.log('container');
+});
+
+taskWrap.addEventListener('click', function (e) {
+    console.log('tasks-wrap');
+});
+
 //console.log(deleteButton);
 
 // let btn = document.querySelector('.clear-btn');
