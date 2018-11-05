@@ -1,15 +1,10 @@
-// let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-
-let tasks = [
-    {
-    id: '0cKhKP7j9iIJ8pK',
-    text: 'First task'
-    }
-];
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
 let ul = document.querySelector('.list-group');
 let form = document.forms['addToDoItem'];
 let inputText = form.elements['todoText'];
+let notificationAlert = document.querySelector('.notification-alert');
+
 
 function generateId() {
     let id = '';
@@ -55,8 +50,12 @@ function generateList(tasksArray) {
 }
 
 function addList (list) {
-    tasks.push(list);
-    ul.insertAdjacentElement('beforeend', listTemplate(list));
+    let newTask = {
+        id: generateId(),
+        text: list
+    };
+    tasks.push(newTask);
+    ul.insertAdjacentElement('beforeend', listTemplate(newTask));
     //Add to localStorage
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
@@ -80,6 +79,39 @@ function deleteListItem(id) {
 
     //Update to localStorage
     localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    message({
+        text: 'Task deleted success',
+        cssClass: 'alert-danger',
+        timeout: 4000
+    });
+}
+
+function editListItem(id, newValue) {
+    for (let i  = 0; i < tasks.length; i++) {
+        if ( tasks[i].id === id ) {
+            tasks[i].text = newValue;
+            break;
+        }
+    }
+    //Update to localStorage
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    message({
+        text: 'Task updated success',
+        cssClass: 'alert-success',
+        timeout: 4000
+    });
+}
+
+function message(settings) {
+    notificationAlert.classList.add(settings.cssClass);
+    notificationAlert.textContent = settings.text;
+    notificationAlert.classList.add('show');
+
+    setTimeout(function () {
+        notificationAlert.classList.remove('show')
+    }, settings.timeout)
 }
 
 ul.addEventListener('click',function(e) {
@@ -89,9 +121,19 @@ ul.addEventListener('click',function(e) {
         deleteListItem(id);
         parent.remove();
     } else if (e.target.classList.contains('edit-item') ) {
+        e.target.classList.toggle('fa-save');
+        let id = e.target.closest('li').dataset.id;
         let span = e.target.closest('li').querySelector('span');
-        span.setAttribute('contenteditable', true);
-        span.focus();
+
+
+        if (e.target.classList.contains('fa-save')) {
+            span.setAttribute('contenteditable', true);
+            span.focus();
+        } else {
+            span.setAttribute('contenteditable', false);
+            span.blur;
+            editListItem(id, span.textContent);
+        }
     }
 });
 
