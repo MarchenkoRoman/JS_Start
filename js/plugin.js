@@ -1,22 +1,42 @@
+// let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
 let tasks = [
-    'Learn JavaScript',
-    'Learn Angular 4',
-    'Go to the Conference'
+    {
+    id: '0cKhKP7j9iIJ8pK',
+    text: 'First task'
+    }
 ];
 
 let ul = document.querySelector('.list-group');
 let form = document.forms['addToDoItem'];
 let inputText = form.elements['todoText'];
 
+function generateId() {
+    let id = '';
+    let words = '0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
+    for (let i = 0; i < 15; i++) {
+        let position  = Math.floor(Math.random() * words.length);
+        id += words[position];
+    }
+    return id;
+}
+
 function listTemplate(task) {
     let li = document.createElement('li');
-    li.textContent = task;
     li.className = 'list-group-item d-flex align-items-center';
+    li.setAttribute('data-id', task.id);
+    let span = document.createElement('span');
+    span.textContent = task.text;
 
     let iDelete = document.createElement('i');
-    iDelete.className = 'fas fa-trash delete-item ml-auto';
+    iDelete.className = 'fas fa-trash delete-item ml-2';
 
-   li.appendChild(iDelete);
+    let iEdit = document.createElement('i');
+    iEdit.className = 'fas fa-edit edit-item ml-auto';
+
+    li.appendChild(span);
+    li.appendChild(iEdit);
+    li.appendChild(iDelete);
     return li;
 }
 
@@ -37,6 +57,8 @@ function generateList(tasksArray) {
 function addList (list) {
     tasks.push(list);
     ul.insertAdjacentElement('beforeend', listTemplate(list));
+    //Add to localStorage
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 /*function setDeleteEvent() {
@@ -47,16 +69,29 @@ function addList (list) {
     }
 }*/
 
-function deleteListItem(target) {
-    let parent = target.closest('li');
-    let index = tasks.indexOf(parent.textContent);
-    tasks.splice(index, 1);
-    parent.remove();
+function deleteListItem(id) {
+
+    for (let i  = 0; i < tasks.length; i++) {
+        if ( tasks[i].id === id ) {
+            tasks.splice(i, 1);
+            break;
+        }
+    }
+
+    //Update to localStorage
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 ul.addEventListener('click',function(e) {
     if (e.target.classList.contains('delete-item') ) {
-        deleteListItem(e.target);
+        let parent = e.target.closest('li');
+        let id = parent.dataset.id;
+        deleteListItem(id);
+        parent.remove();
+    } else if (e.target.classList.contains('edit-item') ) {
+        let span = e.target.closest('li').querySelector('span');
+        span.setAttribute('contenteditable', true);
+        span.focus();
     }
 });
 
@@ -78,7 +113,7 @@ inputText.addEventListener('keyup', function () {
 });
 generateList(tasks);
 
-let body = document.body;
+/*let body = document.body;
 let taskWrap = document.querySelector('.tasks-wrap');
 let container = document.querySelector('.container');
 let listCard = document.querySelector('.list-card');
@@ -105,6 +140,28 @@ container.addEventListener('click', function (e) {
 taskWrap.addEventListener('click', function (e) {
     console.log('tasks-wrap');
 });
+
+//Погружение
+listGroup.addEventListener('click', function (e) {
+    console.log('list-group');
+}, true);
+
+cardBody.addEventListener('click', function (e) {
+    console.log('list-card card-body');
+}, true);
+
+listCard.addEventListener('click', function (e) {
+    e.stopImmediatePropagation();
+    console.log('listCard');
+}, true);
+
+container.addEventListener('click', function (e) {
+    console.log('container');
+}, true);
+
+taskWrap.addEventListener('click', function (e) {
+    console.log('tasks-wrap');
+}, true);*/
 
 //console.log(deleteButton);
 
