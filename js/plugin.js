@@ -4,7 +4,8 @@ let ul = document.querySelector('.list-group');
 let form = document.forms['addToDoItem'];
 let inputText = form.elements['todoText'];
 let notificationAlert = document.querySelector('.notification-alert');
-
+let clearButton = document.querySelector('.clear-btn');
+console.log(clearButton);
 
 function generateId() {
     let id = '';
@@ -37,6 +38,8 @@ function listTemplate(task) {
 
 function clearList() {
     ul.innerHTML = '';
+    localStorage.clear();
+
 }
 
 function generateList(tasksArray) {
@@ -50,23 +53,29 @@ function generateList(tasksArray) {
 }
 
 function addList (list) {
+
+    isEmptyList();
+
     let newTask = {
         id: generateId(),
         text: list
     };
+
     tasks.push(newTask);
     ul.insertAdjacentElement('beforeend', listTemplate(newTask));
+
     //Add to localStorage
     localStorage.setItem('tasks', JSON.stringify(tasks));
-}
 
-/*function setDeleteEvent() {
-    for (let i = 0; i < deleteButton.length; i++) {
-        deleteButton[i].addEventListener('click', function(e) {
-            console.log('click');
-        });
-    }
-}*/
+    message({
+       text: 'New task add to TODO list',
+        cssClass: 'alert-success',
+        timeout: 5000
+
+    });
+
+
+}
 
 function deleteListItem(id) {
 
@@ -83,8 +92,10 @@ function deleteListItem(id) {
     message({
         text: 'Task deleted success',
         cssClass: 'alert-danger',
-        timeout: 4000
+        timeout: 5000
     });
+
+    emptyList();
 }
 
 function editListItem(id, newValue) {
@@ -100,7 +111,7 @@ function editListItem(id, newValue) {
     message({
         text: 'Task updated success',
         cssClass: 'alert-success',
-        timeout: 4000
+        timeout: 3000
     });
 }
 
@@ -113,6 +124,20 @@ function message(settings) {
         notificationAlert.classList.remove('show')
     }, settings.timeout)
 }
+
+function emptyList() {
+    if (tasks.length === 0) {
+        document.querySelector('.card-header-list').textContent = 'Empty List';
+        document.querySelector('.card-body-list').style.display = 'none';
+     }
+}
+
+function isEmptyList() {
+     if (tasks.length === 0) {
+         document.querySelector('.card-header-list').textContent = 'Task List';
+         document.querySelector('.card-body-list').style.display = 'block';
+     }
+ }
 
 ul.addEventListener('click',function(e) {
     if (e.target.classList.contains('delete-item') ) {
@@ -154,62 +179,3 @@ inputText.addEventListener('keyup', function () {
     }
 });
 generateList(tasks);
-
-/*let body = document.body;
-let taskWrap = document.querySelector('.tasks-wrap');
-let container = document.querySelector('.container');
-let listCard = document.querySelector('.list-card');
-let cardBody = document.querySelector('.list-card .card-body');
-let listGroup = document.querySelector('.list-group');
-
-listGroup.addEventListener('click', function (e) {
-    console.log('list-group');
-});
-
-cardBody.addEventListener('click', function (e) {
-    console.log('list-card card-body');
-});
-
-listCard.addEventListener('click', function (e) {
-    e.stopImmediatePropagation();
-    console.log('listCard');
-});
-
-container.addEventListener('click', function (e) {
-    console.log('container');
-});
-
-taskWrap.addEventListener('click', function (e) {
-    console.log('tasks-wrap');
-});
-
-//Погружение
-listGroup.addEventListener('click', function (e) {
-    console.log('list-group');
-}, true);
-
-cardBody.addEventListener('click', function (e) {
-    console.log('list-card card-body');
-}, true);
-
-listCard.addEventListener('click', function (e) {
-    e.stopImmediatePropagation();
-    console.log('listCard');
-}, true);
-
-container.addEventListener('click', function (e) {
-    console.log('container');
-}, true);
-
-taskWrap.addEventListener('click', function (e) {
-    console.log('tasks-wrap');
-}, true);*/
-
-//console.log(deleteButton);
-
-// let btn = document.querySelector('.clear-btn');
-//
-// btn.addEventListener("click", function(e) {
-//     console.log(e);
-// })
-// console.dir(btn);
