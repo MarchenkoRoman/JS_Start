@@ -5,7 +5,6 @@ let form = document.forms['addToDoItem'];
 let inputText = form.elements['todoText'];
 let notificationAlert = document.querySelector('.notification-alert');
 let clearButton = document.querySelector('.clear-btn');
-console.log(clearButton);
 
 function generateId() {
     let id = '';
@@ -39,6 +38,7 @@ function listTemplate(task) {
 function clearList() {
     ul.innerHTML = '';
     localStorage.clear();
+    emptyList();
 
 }
 
@@ -173,9 +173,12 @@ form.addEventListener('submit', function (e) {
     }
 });
 
+clearButton.addEventListener('click', clearList);
+
 inputText.addEventListener('keyup', function () {
     if (inputText.value) {
         inputText.classList.remove('is-invalid');
     }
 });
 generateList(tasks);
+emptyList();
