@@ -38,13 +38,12 @@ function listTemplate(task) {
 function clearList() {
     ul.innerHTML = '';
     localStorage.clear();
+    tasks = [];
     emptyList();
 
 }
 
 function generateList(tasksArray) {
-
-    clearList();
 
     for (let i = 0; i < tasksArray.length; i++) {
         let li = listTemplate(tasksArray[i]);
